@@ -13,7 +13,9 @@ export default function JourneyTracker({ activeStep }) {
       {steps.map(([number, title, text], index) => (
         <div
           key={number}
-          className={`journey-step ${index <= activeStep ? "is-active" : ""}`}
+          className={`journey-step ${index < activeStep ? "is-complete" : ""} ${
+            index === activeStep ? "is-active" : ""
+          }`}
         >
           <span className="journey-node">{number}</span>
           <span className="journey-copy">

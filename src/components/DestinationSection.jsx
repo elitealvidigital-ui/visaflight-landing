@@ -70,34 +70,130 @@ export default function DestinationSection() {
 
   useGSAP(
     () => {
-      gsap.from(".destination-card", {
-        y: 42,
-        autoAlpha: 0,
-        scale: 0.96,
-        stagger: 0.08,
-        duration: 0.75,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-        },
+      const q = gsap.utils.selector(sectionRef);
+      const cards = q(".destination-card");
+      const paths = q(".landmark-sketch path");
+      const chips = q(".visa-chips span");
+      const mm = gsap.matchMedia();
+
+      paths.forEach((path) => {
+        const length = path.getTotalLength();
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
       });
 
-      gsap.to(".destination-card", {
-        y: -8,
-        boxShadow: "0 28px 80px rgba(36, 100, 223, 0.22)",
-        stagger: 0.16,
-        repeat: 1,
-        yoyo: true,
-        duration: 0.55,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 38%",
-          end: "bottom 55%",
-          scrub: 0.8,
-        },
+      gsap.set(cards, { y: 58, autoAlpha: 0, scale: 0.94 });
+      gsap.set(chips, { x: -12, autoAlpha: 0 });
+      gsap.set(q(".destination-grid .section-copy > *"), { y: 28, autoAlpha: 0 });
+
+      mm.add("(min-width: 901px)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "+=170%",
+            scrub: 1.15,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+
+        tl.to(q(".destination-grid .section-copy > *"), {
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.05,
+          duration: 0.28,
+        })
+          .to(cards, {
+            y: 0,
+            autoAlpha: 1,
+            scale: 1,
+            stagger: 0.08,
+            duration: 0.42,
+          }, "-=0.04")
+          .to(paths, {
+            strokeDashoffset: 0,
+            stagger: 0.045,
+            duration: 0.42,
+            ease: "power2.out",
+          }, "-=0.22")
+          .to(chips, {
+            x: 0,
+            autoAlpha: 1,
+            stagger: 0.018,
+            duration: 0.25,
+          }, "-=0.22");
+
+        cards.forEach((card, index) => {
+          tl.to(card, {
+            y: -16,
+            scale: 1.035,
+            borderColor: "rgba(247, 191, 88, 0.78)",
+            boxShadow: "0 30px 86px rgba(247, 191, 88, 0.34)",
+            duration: 0.12,
+            ease: "power2.out",
+          }, 0.78 + index * 0.105).to(card, {
+            y: 0,
+            scale: 1,
+            borderColor: "rgba(42, 79, 143, 0.13)",
+            boxShadow: "0 18px 46px rgba(28, 50, 96, 0.12)",
+            duration: 0.16,
+            ease: "power2.out",
+          }, ">");
+        });
       });
+
+      mm.add("(max-width: 900px)", () => {
+        gsap.to(q(".destination-grid .section-copy > *"), {
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.05,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 72%",
+          },
+        });
+
+        gsap.to(cards, {
+          y: 0,
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.75,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 58%",
+          },
+        });
+
+        gsap.to(paths, {
+          strokeDashoffset: 0,
+          stagger: 0.02,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 55%",
+          },
+        });
+
+        gsap.to(chips, {
+          x: 0,
+          autoAlpha: 1,
+          stagger: 0.012,
+          duration: 0.45,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 50%",
+          },
+        });
+      });
+
+      return () => mm.revert();
     },
     { scope: sectionRef },
   );

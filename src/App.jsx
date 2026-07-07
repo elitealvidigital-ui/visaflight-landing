@@ -13,11 +13,12 @@ import FlightPath from "./components/FlightPath.jsx";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const sections = [
-  "hero",
-  "destinations",
-  "documents",
-  "approval",
-  "final-cta",
+  { id: "hero", step: 0, start: "top 55%", end: "bottom 45%" },
+  { id: "destinations", step: 1, start: "top 55%", end: "bottom 45%" },
+  { id: "documents", step: 2, start: "top 55%", end: "bottom 45%" },
+  { id: "approval", step: 3, start: "top 55%", end: "center 45%" },
+  { id: "approval", step: 4, start: "center 55%", end: "bottom 45%" },
+  { id: "final-cta", step: 5, start: "top 38%", end: "bottom 45%" },
 ];
 
 export default function App() {
@@ -26,16 +27,20 @@ export default function App() {
 
   useGSAP(
     () => {
-      sections.forEach((id, index) => {
+      const setStep = (nextStep) => {
+        setActiveStep((current) => (current === nextStep ? current : nextStep));
+      };
+
+      sections.forEach(({ id, step, start, end }) => {
         const el = document.getElementById(id);
         if (!el) return;
 
         ScrollTrigger.create({
           trigger: el,
-          start: "top center",
-          end: "bottom center",
-          onEnter: () => setActiveStep(index),
-          onEnterBack: () => setActiveStep(index),
+          start,
+          end,
+          onEnter: () => setStep(step),
+          onEnterBack: () => setStep(step),
         });
       });
     },

@@ -4,6 +4,7 @@ dist/
 
 *.log
 vite-dev*.log
+chrome-headless-*.png
 
 .env
 .env.*

@@ -27,17 +27,103 @@ export default function DocumentsSection() {
 
   useGSAP(
     () => {
-      gsap.from(".process-step", {
-        y: 28,
-        autoAlpha: 0,
-        stagger: 0.08,
-        duration: 0.65,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 65%",
-        },
+      const q = gsap.utils.selector(sectionRef);
+      const mm = gsap.matchMedia();
+
+      gsap.set(q(".documents-grid .section-copy > *"), { y: 30, autoAlpha: 0 });
+      gsap.set(q(".process-step"), { y: 24, autoAlpha: 0, scale: 0.92 });
+      gsap.set(q(".documents-frame"), { y: 34, autoAlpha: 0, scale: 0.94 });
+      gsap.set(q(".verify-item"), { x: 72, autoAlpha: 0 });
+      gsap.set(q(".verify-item strong"), { scale: 0.72, autoAlpha: 0, transformOrigin: "center" });
+      gsap.set(q(".scanner-beam"), { xPercent: -140, autoAlpha: 0 });
+
+      mm.add("(min-width: 901px)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "+=185%",
+            scrub: 1.2,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+
+        tl.to(q(".documents-grid .section-copy > *"), {
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.055,
+          duration: 0.3,
+        })
+          .to(q(".process-step"), {
+            y: 0,
+            autoAlpha: 1,
+            scale: 1,
+            stagger: 0.055,
+            duration: 0.35,
+          }, "-=0.08")
+          .to(q(".documents-frame"), {
+            y: 0,
+            autoAlpha: 1,
+            scale: 1,
+            duration: 0.38,
+          }, "-=0.18")
+          .to(q(".scanner-beam"), {
+            autoAlpha: 1,
+            xPercent: 110,
+            duration: 0.42,
+            ease: "none",
+          }, "-=0.06")
+          .to(q(".verify-item"), {
+            x: 0,
+            autoAlpha: 1,
+            stagger: 0.08,
+            duration: 0.42,
+          }, "-=0.22")
+          .to(q(".verify-item strong"), {
+            scale: 1,
+            autoAlpha: 1,
+            stagger: 0.055,
+            duration: 0.28,
+            ease: "back.out(1.7)",
+          }, "-=0.18")
+          .to(q(".process-step span"), {
+            boxShadow: "0 0 0 7px rgba(247, 191, 88, 0.12), 0 16px 34px rgba(247, 191, 88, 0.18)",
+            stagger: 0.05,
+            duration: 0.28,
+          }, "-=0.2");
       });
+
+      mm.add("(max-width: 900px)", () => {
+        gsap.to(q(".documents-grid .section-copy > *, .process-step, .documents-frame, .verify-item"), {
+          y: 0,
+          x: 0,
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.05,
+          duration: 0.75,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+          },
+        });
+
+        gsap.to(q(".verify-item strong"), {
+          scale: 1,
+          autoAlpha: 1,
+          stagger: 0.05,
+          duration: 0.35,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 52%",
+          },
+        });
+      });
+
+      return () => mm.revert();
     },
     { scope: sectionRef },
   );
@@ -71,7 +157,15 @@ export default function DocumentsSection() {
             mode="scroll"
             className="documents-frame"
             alt="Passport and document verification animation"
+            posterFrame={34}
+            scrollTrigger={() => ({
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "+=185%",
+              scrub: 1.15,
+            })}
           />
+          <div className="scanner-beam" aria-hidden="true" />
           <div className="verification-stack">
             {["Passport", "Bank Statement", "SOP", "IELTS Certificate", "Offer Letter"].map((item) => (
               <div className="verify-item" key={item}>

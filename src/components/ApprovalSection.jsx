@@ -14,17 +14,131 @@ export default function ApprovalSection() {
 
   useGSAP(
     () => {
-      gsap.from(".review-card, .approval-card, .success-badge", {
-        y: 34,
+      const q = gsap.utils.selector(sectionRef);
+      const mm = gsap.matchMedia();
+
+      gsap.set(q(".approval-grid .section-copy > *"), { y: 30, autoAlpha: 0 });
+      gsap.set(q(".review-card, .approval-card, .success-badge"), { y: 42, autoAlpha: 0, scale: 0.96 });
+      gsap.set(q(".progress-track span"), { y: 14, autoAlpha: 0, scale: 0.86 });
+      gsap.set(q(".progress-bar span"), { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(q(".review-card > strong"), { autoAlpha: 0, y: 10 });
+      gsap.set(q(".approval-card small, .approval-card strong"), { x: -16, autoAlpha: 0 });
+      gsap.set(q(".stamp-frame"), { autoAlpha: 0, scale: 0.65, rotation: -24 });
+      gsap.set(q(".approval-scanner"), { xPercent: -130, autoAlpha: 0 });
+      gsap.set(q(".success-badge svg, .success-badge strong, .success-badge span"), {
+        scale: 0.82,
         autoAlpha: 0,
-        stagger: 0.1,
-        duration: 0.72,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 65%",
-        },
       });
+
+      mm.add("(min-width: 901px)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "+=185%",
+            scrub: 1.2,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+
+        tl.to(q(".approval-grid .section-copy > *"), {
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.055,
+          duration: 0.26,
+        })
+          .to(q(".review-card"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.28 }, "-=0.08")
+          .to(q(".progress-track span"), {
+            y: 0,
+            autoAlpha: 1,
+            scale: 1,
+            stagger: 0.055,
+            duration: 0.3,
+          }, "-=0.02")
+          .to(q(".progress-bar span"), { scaleX: 1, duration: 0.42, ease: "none" }, "-=0.04")
+          .to(q(".review-card > strong"), { autoAlpha: 1, y: 0, duration: 0.18 }, "-=0.08")
+          .to(q(".approval-card"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.34 }, "-=0.1")
+          .to(q(".approval-card small, .approval-card strong"), {
+            x: 0,
+            autoAlpha: 1,
+            stagger: 0.035,
+            duration: 0.28,
+          }, "-=0.14")
+          .to(q(".approval-scanner"), {
+            autoAlpha: 1,
+            xPercent: 110,
+            duration: 0.34,
+            ease: "none",
+          }, "-=0.06")
+          .to(q(".stamp-frame"), {
+            autoAlpha: 1,
+            scale: 1,
+            rotation: -12,
+            duration: 0.28,
+            ease: "back.out(1.8)",
+          }, "-=0.04")
+          .to(q(".success-badge"), {
+            y: 0,
+            autoAlpha: 1,
+            scale: 1,
+            duration: 0.24,
+          }, "-=0.04")
+          .to(q(".success-badge svg, .success-badge strong, .success-badge span"), {
+            autoAlpha: 1,
+            scale: 1,
+            stagger: 0.05,
+            duration: 0.2,
+            ease: "back.out(1.6)",
+          }, "-=0.08")
+          .to(q(".success-badge"), {
+            boxShadow: "0 0 0 8px rgba(27, 191, 117, 0.08), 0 28px 90px rgba(27, 191, 117, 0.24)",
+            duration: 0.24,
+            ease: "power2.out",
+          }, "-=0.05");
+      });
+
+      mm.add("(max-width: 900px)", () => {
+        gsap.to(q(".approval-grid .section-copy > *, .review-card, .approval-card, .success-badge"), {
+          y: 0,
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.06,
+          duration: 0.75,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+          },
+        });
+
+        gsap.to(q(".progress-track span, .approval-card small, .approval-card strong, .success-badge svg, .success-badge strong, .success-badge span"), {
+          y: 0,
+          x: 0,
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.035,
+          duration: 0.55,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 55%",
+          },
+        });
+
+        gsap.to(q(".progress-bar span"), {
+          scaleX: 1,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 52%",
+          },
+        });
+      });
+
+      return () => mm.revert();
     },
     { scope: sectionRef },
   );
@@ -72,7 +186,15 @@ export default function ApprovalSection() {
             mode="scroll"
             className="stamp-frame"
             alt="Approved stamp animation"
+            posterFrame={122}
+            scrollTrigger={() => ({
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "+=185%",
+              scrub: 1.1,
+            })}
           />
+          <div className="approval-scanner" aria-hidden="true" />
         </article>
 
         <div className="success-badge">

@@ -8,45 +8,62 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 export default function FlightPath() {
   const layerRef = useRef(null);
   const pathRef = useRef(null);
+  const maskPathRef = useRef(null);
   const planeRef = useRef(null);
 
   useGSAP(
     () => {
       const path = pathRef.current;
+      const maskPath = maskPathRef.current;
       const plane = planeRef.current;
-      if (!path || !plane) return;
+      if (!path || !maskPath || !plane) return;
 
       const length = path.getTotalLength();
-      gsap.set(path, {
+      gsap.set(maskPath, {
         strokeDasharray: length,
         strokeDashoffset: length,
       });
+      gsap.set(plane, { autoAlpha: 0, xPercent: -50, yPercent: -50 });
 
-      gsap.to(path, {
-        strokeDashoffset: 0,
+      const updateProgress = (progress) => {
+        gsap.set(maskPath, { strokeDashoffset: length * (1 - progress) });
+        placePlane(progress);
+      };
+
+      const placePlane = (progress) => {
+        const progressLength = length * progress;
+        const point = path.getPointAtLength(progressLength);
+        const next = path.getPointAtLength(Math.min(length, progressLength + 1.4));
+        const angle =
+          (Math.atan2(next.y - point.y, next.x - point.x) * 180) / Math.PI;
+
+        gsap.set(plane, {
+          left: `${point.x}%`,
+          top: `${point.y}%`,
+          rotation: angle + 88,
+          autoAlpha: progress > 0.015 ? 1 : 0,
+        });
+      };
+
+      updateProgress(0);
+
+      const flightProgress = { value: 0 };
+      gsap.to(flightProgress, {
+        value: 1,
         ease: "none",
+        onUpdate: () => updateProgress(flightProgress.value),
         scrollTrigger: {
-          trigger: document.body,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.9,
-          onUpdate: (self) => {
-            const progressLength = length * self.progress;
-            const point = path.getPointAtLength(progressLength);
-            const next = path.getPointAtLength(Math.min(length, progressLength + 1));
-            const angle =
-              (Math.atan2(next.y - point.y, next.x - point.x) * 180) / Math.PI;
-
-            gsap.set(plane, {
-              xPercent: -50,
-              yPercent: -50,
-              left: `${point.x}%`,
-              top: `${point.y}%`,
-              rotation: angle + 88,
-            });
-          },
+          start: 0,
+          end: "max",
+          scrub: 1.2,
+          refreshPriority: -1000,
+          invalidateOnRefresh: true,
+          onRefresh: (self) => updateProgress(self.progress),
         },
       });
+
+      const refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 400);
+      return () => window.clearTimeout(refreshTimer);
     },
     { scope: layerRef },
   );
@@ -54,10 +71,24 @@ export default function FlightPath() {
   return (
     <div ref={layerRef} className="flight-layer" aria-hidden="true">
       <svg className="flight-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <mask id="flight-route-mask" maskUnits="userSpaceOnUse">
+            <path
+              ref={maskPathRef}
+              className="flight-route-mask"
+              d="M 76 4 C 96 13 92 24 76 31 C 94 39 95 50 79 58 C 98 67 95 76 83 83 C 98 90 92 97 77 101"
+            />
+          </mask>
+        </defs>
+        <path
+          className="flight-route flight-route--ghost"
+          d="M 76 4 C 96 13 92 24 76 31 C 94 39 95 50 79 58 C 98 67 95 76 83 83 C 98 90 92 97 77 101"
+        />
         <path
           ref={pathRef}
-          className="flight-route"
-          d="M 77 4 C 96 14 92 24 76 32 C 94 40 94 51 80 58 C 98 66 95 75 84 82 C 99 89 92 97 77 101"
+          className="flight-route flight-route--progress"
+          mask="url(#flight-route-mask)"
+          d="M 76 4 C 96 13 92 24 76 31 C 94 39 95 50 79 58 C 98 67 95 76 83 83 C 98 90 92 97 77 101"
         />
       </svg>
       <div ref={planeRef} className="flight-plane">

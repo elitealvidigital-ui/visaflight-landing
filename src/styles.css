@@ -77,6 +77,15 @@ a {
   overflow: hidden;
 }
 
+.destinations-section,
+.documents-section,
+.approval-section,
+.final-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
 .eyebrow {
   margin: 0 0 12px;
   color: var(--gold);
@@ -174,6 +183,7 @@ a {
   height: 100%;
   object-fit: contain;
   user-select: none;
+  will-change: contents;
 }
 
 .frame-sequence__fallback {
@@ -197,8 +207,9 @@ a {
 .hero-map {
   position: absolute;
   inset: 70px 120px 80px 170px;
-  opacity: 0.9;
-  filter: saturate(1.22) contrast(1.16) brightness(0.58);
+  opacity: 0.98;
+  filter: saturate(1.24) contrast(1.12) brightness(0.82);
+  will-change: transform, opacity;
 }
 
 .hero-map img {
@@ -212,7 +223,7 @@ a {
 }
 
 .hero-glow--left {
-  background: linear-gradient(90deg, rgba(5, 12, 27, 0.98), rgba(5, 12, 27, 0.72) 36%, rgba(5, 12, 27, 0.22) 68%, rgba(5, 12, 27, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(5, 12, 27, 0.98), rgba(5, 12, 27, 0.78) 34%, rgba(5, 12, 27, 0.12) 64%, rgba(5, 12, 27, 0.38) 100%);
 }
 
 .hero-glow--right {
@@ -323,6 +334,7 @@ a {
 .hero-copy {
   max-width: 550px;
   padding-top: 30px;
+  will-change: transform;
 }
 
 .hero-copy h1 {
@@ -352,6 +364,7 @@ a {
   background: rgba(7, 23, 55, 0.58);
   backdrop-filter: blur(18px);
   box-shadow: var(--shadow);
+  will-change: transform, opacity;
 }
 
 .hero-status-card svg {
@@ -384,6 +397,7 @@ a {
   grid-template-columns: auto 1fr;
   column-gap: 14px;
   align-items: center;
+  will-change: transform, opacity;
 }
 
 .metric svg {
@@ -459,11 +473,28 @@ a {
   vector-effect: non-scaling-stroke;
 }
 
+.flight-route--ghost {
+  opacity: 0.18;
+}
+
+.flight-route--progress {
+  opacity: 0.96;
+}
+
+.flight-route-mask {
+  fill: none;
+  stroke: white;
+  stroke-width: 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .flight-plane {
   position: fixed;
+  z-index: 6;
   width: clamp(48px, 6vw, 88px);
   height: clamp(48px, 6vw, 88px);
-  will-change: transform;
+  will-change: transform, opacity;
   filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.28));
 }
 
@@ -537,11 +568,23 @@ a {
 .journey-step.is-active .journey-node {
   border-color: var(--gold);
   color: var(--gold);
-  box-shadow: 0 0 0 5px rgba(247, 191, 88, 0.12);
+  background: rgba(42, 50, 77, 0.98);
+  box-shadow:
+    0 0 0 5px rgba(247, 191, 88, 0.12),
+    0 0 24px rgba(247, 191, 88, 0.34);
 }
 
 .journey-step.is-active .journey-copy small {
   color: rgba(255, 255, 255, 0.92);
+}
+
+.journey-step.is-complete .journey-node {
+  border-color: rgba(247, 191, 88, 0.6);
+  color: var(--gold);
+}
+
+.journey-step.is-complete .journey-copy strong {
+  color: rgba(255, 255, 255, 0.86);
 }
 
 /* Destination */
@@ -573,7 +616,8 @@ a {
   border-radius: 8px;
   background: linear-gradient(180deg, #ffffff, #f6f9ff);
   box-shadow: 0 18px 46px rgba(28, 50, 96, 0.12);
-  will-change: transform;
+  transform-origin: center bottom;
+  will-change: transform, opacity, box-shadow;
 }
 
 .flag {
@@ -613,6 +657,7 @@ a {
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0.56;
+  will-change: stroke-dashoffset;
 }
 
 .landmark-sketch span {
@@ -662,7 +707,7 @@ a {
 
 /* Documents */
 .documents-section {
-  min-height: 620px;
+  min-height: max(620px, 100vh);
   padding: 90px 0;
   background:
     linear-gradient(90deg, rgba(3, 10, 25, 0.98), rgba(8, 32, 75, 0.92)),
@@ -689,7 +734,7 @@ a {
   justify-items: center;
   text-align: center;
   color: rgba(255, 255, 255, 0.82);
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 .process-step span {
@@ -711,6 +756,7 @@ a {
 .documents-visual {
   position: relative;
   min-height: 420px;
+  overflow: hidden;
 }
 
 .documents-frame {
@@ -718,10 +764,28 @@ a {
   inset: 0 180px 0 0;
   border-radius: 8px;
   filter: drop-shadow(0 34px 40px rgba(0, 0, 0, 0.35));
+  will-change: transform, opacity;
+}
+
+.scanner-beam {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  left: 8%;
+  z-index: 2;
+  width: 34%;
+  pointer-events: none;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, transparent, rgba(124, 219, 255, 0.34), rgba(247, 191, 88, 0.18), transparent);
+  mix-blend-mode: screen;
+  filter: blur(0.4px);
+  will-change: transform, opacity;
 }
 
 .verification-stack {
   position: absolute;
+  z-index: 3;
   right: 0;
   top: 50%;
   width: 260px;
@@ -742,6 +806,7 @@ a {
   color: #dce9ff;
   background: rgba(22, 54, 103, 0.72);
   backdrop-filter: blur(14px);
+  will-change: transform, opacity;
 }
 
 .verify-item svg {
@@ -780,6 +845,7 @@ a {
   background: rgba(255, 255, 255, 0.8);
   box-shadow: 0 22px 60px rgba(25, 52, 99, 0.12);
   backdrop-filter: blur(12px);
+  will-change: transform, opacity, box-shadow;
 }
 
 .review-card {
@@ -846,6 +912,7 @@ a {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--blue-600), #4b82ff);
+  transform-origin: left center;
 }
 
 .review-card > strong {
@@ -863,6 +930,7 @@ a {
   grid-template-columns: 1fr 170px;
   gap: 10px;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .approval-card p,
@@ -900,6 +968,20 @@ a {
   align-self: center;
   height: 164px;
   transform: rotate(-12deg);
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+.approval-scanner {
+  position: absolute;
+  inset: -12% auto -12% 0;
+  z-index: 1;
+  width: 38%;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(36, 100, 223, 0.2), rgba(247, 191, 88, 0.18), transparent);
+  mix-blend-mode: multiply;
+  will-change: transform, opacity;
 }
 
 .success-badge {
@@ -935,11 +1017,21 @@ a {
 
 /* Final CTA */
 .final-section {
-  min-height: 620px;
+  min-height: max(620px, 100vh);
   padding: 92px 0 90px;
   background:
     linear-gradient(90deg, rgba(4, 10, 24, 0.96), rgba(8, 20, 48, 0.82) 48%, rgba(6, 13, 31, 0.74)),
     linear-gradient(180deg, #101a42 0%, #23336c 46%, #f0a85b 100%);
+}
+
+.final-success-glow {
+  position: absolute;
+  inset: auto 0 0;
+  height: 46%;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(247, 191, 88, 0.12) 46%, rgba(27, 191, 117, 0.08) 100%);
+  will-change: transform, opacity;
 }
 
 .airport-window {
@@ -968,6 +1060,135 @@ a {
   inset: 0;
   border-radius: 8px;
   filter: drop-shadow(0 34px 46px rgba(0, 0, 0, 0.32));
+  will-change: transform, opacity;
+}
+
+.boarding-pass-card {
+  position: absolute;
+  z-index: 3;
+  left: 2%;
+  right: 15%;
+  bottom: 6%;
+  min-height: 156px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(246, 249, 255, 0.96);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.26);
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+.boarding-pass-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 22px;
+  color: white;
+  background: linear-gradient(90deg, #194aa9, var(--blue-600));
+}
+
+.boarding-pass-head strong,
+.boarding-pass-head span {
+  font-size: 0.78rem;
+  letter-spacing: 0;
+}
+
+.boarding-pass-body {
+  display: grid;
+  grid-template-columns: 1fr auto 1.2fr;
+  gap: 18px;
+  align-items: center;
+  padding: 22px 24px 14px;
+}
+
+.boarding-pass-body svg {
+  color: var(--blue-600);
+}
+
+.boarding-pass-card small {
+  display: block;
+  color: #7a879e;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.boarding-pass-card strong {
+  display: block;
+  margin-top: 4px;
+  font-size: clamp(0.95rem, 1.5vw, 1.18rem);
+}
+
+.boarding-pass-foot {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(58px, 1fr)) 58px;
+  gap: 10px;
+  align-items: end;
+  padding: 0 24px 18px;
+}
+
+.boarding-pass-foot i {
+  justify-self: end;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(90deg, #101a42 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(0deg, rgba(16, 26, 66, 0.55) 0 3px, transparent 3px 6px);
+  opacity: 0.9;
+}
+
+.passport-book {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  bottom: -4%;
+  width: min(178px, 32%);
+  aspect-ratio: 1.42;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(247, 191, 88, 0.28);
+  border-radius: 10px;
+  color: var(--gold);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(135deg, #18265e, #061633 72%);
+  box-shadow: 0 26px 56px rgba(0, 0, 0, 0.35);
+  will-change: transform, opacity;
+}
+
+.passport-book span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+  letter-spacing: 0.08em;
+}
+
+.passport-book i {
+  position: absolute;
+  bottom: 18px;
+  width: 54px;
+  height: 54px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.52;
+}
+
+.passport-book i::before,
+.passport-book i::after {
+  content: "";
+  position: absolute;
+  inset: 10px -5px;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+}
+
+.passport-book i::after {
+  inset: -5px 18px;
+  border: 0;
+  border-left: 1px solid currentColor;
+  border-right: 1px solid currentColor;
 }
 
 .sunset-plane {
@@ -976,6 +1197,7 @@ a {
   top: 12%;
   color: rgba(255, 255, 255, 0.68);
   transform: rotate(18deg);
+  will-change: transform, opacity;
 }
 
 .clients-row {
@@ -1049,6 +1271,14 @@ a {
 }
 
 @media (max-width: 900px) {
+  .destinations-section,
+  .documents-section,
+  .approval-section,
+  .final-section {
+    min-height: auto;
+    display: block;
+  }
+
   .nav-links,
   .nav-cta {
     display: none;
@@ -1093,6 +1323,11 @@ a {
     position: relative;
     inset: auto;
     min-height: 360px;
+  }
+
+  .scanner-beam,
+  .approval-scanner {
+    display: none;
   }
 
   .verification-stack {
@@ -1176,6 +1411,40 @@ a {
   .boarding-visual,
   .documents-visual {
     min-height: 320px;
+  }
+
+  .boarding-pass-card {
+    left: 0;
+    right: 12%;
+    bottom: 10%;
+    min-height: 142px;
+  }
+
+  .boarding-pass-head {
+    padding: 0 14px;
+  }
+
+  .boarding-pass-body {
+    gap: 10px;
+    padding: 16px 14px 10px;
+  }
+
+  .boarding-pass-foot {
+    grid-template-columns: repeat(3, minmax(48px, 1fr));
+    padding: 0 14px 14px;
+  }
+
+  .boarding-pass-foot i {
+    display: none;
+  }
+
+  .passport-book {
+    width: 120px;
+    bottom: -2%;
+  }
+
+  .final-success-glow {
+    height: 32%;
   }
 }
 
