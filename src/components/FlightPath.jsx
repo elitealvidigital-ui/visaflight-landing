@@ -82,7 +82,7 @@ export default function FlightPath() {
             <path
               ref={maskPathRef}
               className="flight-route-mask"
-              d="M 66 5 C 74 13 73 23 65 31 C 74 40 74 49 66 58 C 75 67 74 75 68 82 C 76 88 74 94 64 90"
+              d="M 57 5 C 64 13 63 23 56 31 C 64 40 64 49 57 58 C 65 67 64 75 58 82 C 66 88 64 94 54 90"
             />
           </mask>
         </defs>
@@ -90,7 +90,7 @@ export default function FlightPath() {
           ref={pathRef}
           className="flight-route flight-route--progress"
           mask="url(#flight-route-mask)"
-          d="M 66 5 C 74 13 73 23 65 31 C 74 40 74 49 66 58 C 75 67 74 75 68 82 C 76 88 74 94 64 90"
+          d="M 57 5 C 64 13 63 23 56 31 C 64 40 64 49 57 58 C 65 67 64 75 58 82 C 66 88 64 94 54 90"
         />
       </svg>
       <div ref={planeRef} className="flight-plane">

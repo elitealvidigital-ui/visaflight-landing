@@ -67,7 +67,7 @@ a {
 
 .section-inner {
   position: relative;
-  z-index: 2;
+  z-index: 6;
   width: min(1160px, calc(100% - 80px));
   margin: 0 auto;
 }
@@ -206,26 +206,108 @@ a {
 
 .hero-map {
   position: absolute;
-  inset: 70px 0 0 190px;
-  z-index: 0;
-  opacity: 0.86;
-  filter: saturate(1.22) contrast(1.24) brightness(0.58);
+  inset: 66px 0 70px 170px;
+  z-index: 1;
+  opacity: 0.24;
+  mix-blend-mode: normal;
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.45) 10%, #000 28%, #000 100%);
   will-change: transform, opacity;
 }
 
 .hero-map img {
-  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  object-fit: contain;
+  object-position: center;
+  filter: saturate(1.2) contrast(1.18) brightness(0.58);
+}
+
+.hero-map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 56% 44%, rgba(35, 111, 221, 0.38), rgba(3, 18, 44, 0.14) 48%, rgba(2, 9, 22, 0) 72%);
+}
+
+.hero-map-vector {
+  position: absolute;
+  inset: 96px 86px 170px 330px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.88;
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.28) 7%, #000 23%, #000 100%);
+  animation: map-drift 14s ease-in-out infinite alternate;
+}
+
+.hero-map-vector svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 26px rgba(31, 125, 255, 0.22));
+}
+
+.map-land path {
+  fill: rgba(32, 119, 243, 0.38);
+  stroke: rgba(99, 176, 255, 0.42);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+.map-routes path {
+  fill: none;
+  stroke: rgba(247, 191, 88, 0.72);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 9 13;
+  animation: route-flow 7s linear infinite;
+}
+
+.map-routes path:nth-child(2) {
+  animation-duration: 9s;
+}
+
+.map-routes path:nth-child(3) {
+  animation-duration: 6s;
+  opacity: 0.65;
+}
+
+.map-nodes circle {
+  fill: var(--gold);
+  stroke: rgba(255, 255, 255, 0.88);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 10px rgba(247, 191, 88, 0.9));
+  animation: node-pulse 2.8s ease-in-out infinite;
+}
+
+.map-nodes circle:nth-child(2n) {
+  animation-delay: 0.8s;
+}
+
+@keyframes map-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(18px, -10px, 0) scale(1.018); }
+}
+
+@keyframes route-flow {
+  to { stroke-dashoffset: -88; }
+}
+
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.72; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.18); }
 }
 
 .hero-glow {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
 }
 
 .hero-glow--left {
-  background: linear-gradient(90deg, rgba(5, 12, 27, 0.98), rgba(5, 12, 27, 0.94) 28%, rgba(5, 12, 27, 0.36) 45%, rgba(5, 12, 27, 0.04) 68%, rgba(5, 12, 27, 0.2) 100%);
+  background: linear-gradient(90deg, rgba(5, 12, 27, 0.98), rgba(5, 12, 27, 0.9) 27%, rgba(5, 12, 27, 0.18) 47%, rgba(5, 12, 27, 0.02) 68%, rgba(5, 12, 27, 0.12) 100%);
 }
 
 .hero-glow--right {
@@ -355,39 +437,6 @@ a {
   margin-top: 32px;
 }
 
-.hero-status-card {
-  justify-self: end;
-  align-self: end;
-  width: min(300px, 100%);
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  color: white;
-  background: rgba(7, 23, 55, 0.58);
-  backdrop-filter: blur(18px);
-  box-shadow: var(--shadow);
-  will-change: transform, opacity;
-}
-
-.hero-status-card svg {
-  color: var(--gold);
-}
-
-.hero-status-card strong,
-.hero-status-card span {
-  display: block;
-}
-
-.hero-status-card strong {
-  margin-top: 10px;
-}
-
-.hero-status-card span {
-  margin-top: 6px;
-  color: rgba(255, 255, 255, 0.68);
-  font-size: 0.88rem;
-}
-
 .hero-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -455,7 +504,7 @@ a {
 .flight-layer {
   position: fixed;
   inset: 0;
-  z-index: 5;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -490,7 +539,7 @@ a {
 
 .flight-plane {
   position: fixed;
-  z-index: 6;
+  z-index: 4;
   width: clamp(88px, 7vw, 118px);
   aspect-ratio: 1.57;
   height: auto;
@@ -1399,6 +1448,12 @@ a {
     opacity: 0.58;
   }
 
+  .hero-map-vector {
+    inset: 148px 12px 250px 18px;
+    opacity: 0.42;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.2));
+  }
+
   .hero-content,
   .destination-grid,
   .documents-grid,
@@ -1409,10 +1464,6 @@ a {
   .hero-content {
     min-height: 680px;
     align-items: end;
-  }
-
-  .hero-status-card {
-    justify-self: start;
   }
 
   .hero-metrics {
