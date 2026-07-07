@@ -16,7 +16,7 @@ const sections = [
   { id: "hero", step: 0, start: "top 55%", end: "bottom 45%" },
   { id: "destinations", step: 1, start: "top 55%", end: "bottom 45%" },
   { id: "documents", step: 2, start: "top 55%", end: "bottom 45%" },
-  { id: "approval", step: 3, start: "top 55%", end: "bottom 45%", split: 0.58 },
+  { id: "approval", step: 3, start: "top 55%", end: "bottom 45%", split: 0.54 },
   { id: "final-cta", step: 5, start: "top 38%", end: "bottom 45%" },
 ];
 
@@ -40,6 +40,9 @@ export default function App() {
           end,
           onEnter: () => setStep(step),
           onEnterBack: () => setStep(step),
+          onLeave: () => {
+            if (typeof split === "number") setStep(4);
+          },
           onUpdate: (self) => {
             if (typeof split === "number" && self.isActive) {
               setStep(self.progress >= split ? 4 : step);
