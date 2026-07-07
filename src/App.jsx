@@ -16,8 +16,7 @@ const sections = [
   { id: "hero", step: 0, start: "top 55%", end: "bottom 45%" },
   { id: "destinations", step: 1, start: "top 55%", end: "bottom 45%" },
   { id: "documents", step: 2, start: "top 55%", end: "bottom 45%" },
-  { id: "approval", step: 3, start: "top 55%", end: "center 45%" },
-  { id: "approval", step: 4, start: "center 55%", end: "bottom 45%" },
+  { id: "approval", step: 3, start: "top 55%", end: "bottom 45%", split: 0.58 },
   { id: "final-cta", step: 5, start: "top 38%", end: "bottom 45%" },
 ];
 
@@ -31,7 +30,7 @@ export default function App() {
         setActiveStep((current) => (current === nextStep ? current : nextStep));
       };
 
-      sections.forEach(({ id, step, start, end }) => {
+      sections.forEach(({ id, step, start, end, split }) => {
         const el = document.getElementById(id);
         if (!el) return;
 
@@ -41,6 +40,11 @@ export default function App() {
           end,
           onEnter: () => setStep(step),
           onEnterBack: () => setStep(step),
+          onUpdate: (self) => {
+            if (typeof split === "number" && self.isActive) {
+              setStep(self.progress >= split ? 4 : step);
+            }
+          },
         });
       });
     },

@@ -17,13 +17,13 @@ export default function ApprovalSection() {
       const q = gsap.utils.selector(sectionRef);
       const mm = gsap.matchMedia();
 
-      gsap.set(q(".approval-grid .section-copy > *"), { y: 30, autoAlpha: 0 });
-      gsap.set(q(".review-card, .approval-card, .success-badge"), { y: 42, autoAlpha: 0, scale: 0.96 });
+      gsap.set(q(".approval-grid .section-copy > *, .review-card"), { y: 0, autoAlpha: 1, scale: 1 });
+      gsap.set(q(".approval-card, .success-badge"), { y: 34, autoAlpha: 0, scale: 0.96 });
       gsap.set(q(".progress-track span"), { y: 14, autoAlpha: 0, scale: 0.86 });
       gsap.set(q(".progress-bar span"), { scaleX: 0, transformOrigin: "left center" });
       gsap.set(q(".review-card > strong"), { autoAlpha: 0, y: 10 });
-      gsap.set(q(".approval-card small, .approval-card strong"), { x: -16, autoAlpha: 0 });
-      gsap.set(q(".stamp-frame"), { autoAlpha: 0, scale: 0.65, rotation: -24 });
+      gsap.set(q(".approval-detail, .secure-field"), { x: -16, autoAlpha: 0 });
+      gsap.set(q(".stamp-frame"), { autoAlpha: 1, scale: 0.92, rotation: -18 });
       gsap.set(q(".approval-scanner"), { xPercent: -130, autoAlpha: 0 });
       gsap.set(q(".success-badge svg, .success-badge strong, .success-badge span"), {
         scale: 0.82,
@@ -36,67 +36,67 @@ export default function ApprovalSection() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top top",
-            end: "+=185%",
+            end: "+=115%",
             scrub: 1.2,
             pin: true,
             anticipatePin: 1,
           },
         });
 
-        tl.to(q(".approval-grid .section-copy > *"), {
+        tl.fromTo(q(".approval-grid .section-copy > *, .review-card"), {
+          y: 10,
+        }, {
           y: 0,
-          autoAlpha: 1,
-          stagger: 0.055,
-          duration: 0.26,
+          stagger: 0.03,
+          duration: 0.18,
         })
-          .to(q(".review-card"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.28 }, "-=0.08")
           .to(q(".progress-track span"), {
             y: 0,
             autoAlpha: 1,
             scale: 1,
             stagger: 0.055,
             duration: 0.3,
-          }, "-=0.02")
-          .to(q(".progress-bar span"), { scaleX: 1, duration: 0.42, ease: "none" }, "-=0.04")
-          .to(q(".review-card > strong"), { autoAlpha: 1, y: 0, duration: 0.18 }, "-=0.08")
-          .to(q(".approval-card"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.34 }, "-=0.1")
-          .to(q(".approval-card small, .approval-card strong"), {
+          }, 0.12)
+          .to(q(".progress-bar span"), { scaleX: 1, duration: 0.36, ease: "none" }, 0.22)
+          .to(q(".review-card > strong"), { autoAlpha: 1, y: 0, duration: 0.16 }, 0.34)
+          .to(q(".approval-card"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.28 }, 0.38)
+          .to(q(".approval-detail, .secure-field"), {
             x: 0,
             autoAlpha: 1,
             stagger: 0.035,
             duration: 0.28,
-          }, "-=0.14")
+          }, 0.48)
           .to(q(".approval-scanner"), {
             autoAlpha: 1,
             xPercent: 110,
             duration: 0.34,
             ease: "none",
-          }, "-=0.06")
+          }, 0.58)
           .to(q(".stamp-frame"), {
             autoAlpha: 1,
             scale: 1,
             rotation: -12,
             duration: 0.28,
             ease: "back.out(1.8)",
-          }, "-=0.04")
+          }, 0.66)
           .to(q(".success-badge"), {
             y: 0,
             autoAlpha: 1,
             scale: 1,
             duration: 0.24,
-          }, "-=0.04")
+          }, 0.78)
           .to(q(".success-badge svg, .success-badge strong, .success-badge span"), {
             autoAlpha: 1,
             scale: 1,
             stagger: 0.05,
             duration: 0.2,
             ease: "back.out(1.6)",
-          }, "-=0.08")
+          }, 0.82)
           .to(q(".success-badge"), {
             boxShadow: "0 0 0 8px rgba(27, 191, 117, 0.08), 0 28px 90px rgba(27, 191, 117, 0.24)",
             duration: 0.24,
             ease: "power2.out",
-          }, "-=0.05");
+          }, 0.88);
       });
 
       mm.add("(max-width: 900px)", () => {
@@ -113,7 +113,7 @@ export default function ApprovalSection() {
           },
         });
 
-        gsap.to(q(".progress-track span, .approval-card small, .approval-card strong, .success-badge svg, .success-badge strong, .success-badge span"), {
+        gsap.to(q(".progress-track span, .approval-detail, .secure-field, .success-badge svg, .success-badge strong, .success-badge span"), {
           y: 0,
           x: 0,
           autoAlpha: 1,
@@ -173,24 +173,32 @@ export default function ApprovalSection() {
         </article>
 
         <article className="approval-card">
-          <div>
+          <div className="approval-detail">
             <p>Visa Application</p>
             <h3>Student Visa</h3>
-            <small>Applicant Name</small>
-            <strong>John Doe</strong>
-            <small>Passport No.</small>
-            <strong>A1234567</strong>
+            <div className="secure-field">
+              <span>Applicant Profile</span>
+              <i />
+            </div>
+            <div className="secure-field">
+              <span>Passport Check</span>
+              <i />
+            </div>
+            <div className="secure-field">
+              <span>Review Status</span>
+              <strong>Ready</strong>
+            </div>
           </div>
           <FrameSequence
             sequence="A5"
             mode="scroll"
             className="stamp-frame"
             alt="Approved stamp animation"
-            posterFrame={122}
+            posterFrame={0}
             scrollTrigger={() => ({
               trigger: sectionRef.current,
               start: "top top",
-              end: "+=185%",
+              end: "+=115%",
               scrub: 1.1,
             })}
           />

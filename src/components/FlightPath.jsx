@@ -25,24 +25,30 @@ export default function FlightPath() {
       });
       gsap.set(plane, { autoAlpha: 0, xPercent: -50, yPercent: -50 });
 
-      const updateProgress = (progress) => {
-        gsap.set(maskPath, { strokeDashoffset: length * (1 - progress) });
-        placePlane(progress);
-      };
-
       const placePlane = (progress) => {
         const progressLength = length * progress;
         const point = path.getPointAtLength(progressLength);
-        const next = path.getPointAtLength(Math.min(length, progressLength + 1.4));
+        const usePrevious = progressLength > length - 1.4;
+        const origin = usePrevious
+          ? path.getPointAtLength(Math.max(0, progressLength - 1.4))
+          : point;
+        const next = usePrevious
+          ? point
+          : path.getPointAtLength(Math.min(length, progressLength + 1.4));
         const angle =
-          (Math.atan2(next.y - point.y, next.x - point.x) * 180) / Math.PI;
+          (Math.atan2(next.y - origin.y, next.x - origin.x) * 180) / Math.PI;
 
         gsap.set(plane, {
-          left: `${point.x}%`,
-          top: `${point.y}%`,
-          rotation: angle + 88,
+          x: (point.x / 100) * window.innerWidth,
+          y: (point.y / 100) * window.innerHeight,
+          rotation: angle,
           autoAlpha: progress > 0.015 ? 1 : 0,
         });
+      };
+
+      const updateProgress = (progress) => {
+        gsap.set(maskPath, { strokeDashoffset: length * (1 - progress) });
+        placePlane(progress);
       };
 
       updateProgress(0);
@@ -76,32 +82,52 @@ export default function FlightPath() {
             <path
               ref={maskPathRef}
               className="flight-route-mask"
-              d="M 76 4 C 96 13 92 24 76 31 C 94 39 95 50 79 58 C 98 67 95 76 83 83 C 98 90 92 97 77 101"
+              d="M 66 5 C 74 13 73 23 65 31 C 74 40 74 49 66 58 C 75 67 74 75 68 82 C 76 88 74 94 64 90"
             />
           </mask>
         </defs>
         <path
-          className="flight-route flight-route--ghost"
-          d="M 76 4 C 96 13 92 24 76 31 C 94 39 95 50 79 58 C 98 67 95 76 83 83 C 98 90 92 97 77 101"
-        />
-        <path
           ref={pathRef}
           className="flight-route flight-route--progress"
           mask="url(#flight-route-mask)"
-          d="M 76 4 C 96 13 92 24 76 31 C 94 39 95 50 79 58 C 98 67 95 76 83 83 C 98 90 92 97 77 101"
+          d="M 66 5 C 74 13 73 23 65 31 C 74 40 74 49 66 58 C 75 67 74 75 68 82 C 76 88 74 94 64 90"
         />
       </svg>
       <div ref={planeRef} className="flight-plane">
-        <svg viewBox="0 0 58 58" role="img">
-          <path
-            d="M51 28.6 7.2 5.7c-2-1-4.1.8-3.5 3l5.9 17.8-5.9 17.8c-.6 2.2 1.5 4 3.5 3L51 31.4c1.3-.6 1.3-2.2 0-2.8Z"
-            fill="white"
-          />
-          <path
-            d="M9.6 26.5h22.8L4.1 8.1l5.5 18.4Zm0 0L4.1 44.9l28.3-18.4H9.6Z"
-            fill="#dbe8ff"
-          />
-          <path d="M31.3 26.5 51 28.9 31.3 31.4 18 38.8l5.5-12.3L18 14.2l13.3 12.3Z" fill="#f7bf58" />
+        <svg viewBox="0 0 220 140" role="img">
+          <defs>
+            <linearGradient id="jet-body" x1="20" x2="210" y1="70" y2="70" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#d7e4f5" />
+              <stop offset="0.48" stopColor="#ffffff" />
+              <stop offset="1" stopColor="#c9d7ea" />
+            </linearGradient>
+            <linearGradient id="jet-blue" x1="12" x2="138" y1="28" y2="112" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#10265c" />
+              <stop offset="1" stopColor="#061633" />
+            </linearGradient>
+          </defs>
+          <path className="jet-shadow" d="M27 82c37 22 111 25 169 6 8-3 10-11 2-15-54 14-122 13-181-5-7 4-4 10 10 14Z" />
+          <path className="jet-wing jet-wing--top" d="M93 62 24 18c-7-5-16-1-15 7l2 12 88 43 22-8Z" />
+          <path className="jet-wing jet-wing--bottom" d="M93 78 24 122c-7 5-16 1-15-7l2-12 88-43 22 8Z" />
+          <path className="jet-tail jet-tail--top" d="M45 63 17 43c-7-5-15 0-13 8l4 17 42 7Z" />
+          <path className="jet-tail jet-tail--bottom" d="M45 77 17 97c-7 5-15 0-13-8l4-17 42-7Z" />
+          <path className="jet-body" d="M22 70C45 45 121 38 184 47c21 3 34 13 34 23s-13 20-34 23C121 102 45 95 22 70Z" />
+          <path className="jet-spine" d="M43 70c36-11 91-13 148-4" />
+          <path className="jet-belly" d="M43 70c36 11 91 13 148 4" />
+          <path className="jet-cockpit" d="M183 57c14 2 24 7 28 13-7 2-18 2-31 0-3-5-2-9 3-13Z" />
+          <path className="jet-tail-fin" d="M38 55 18 20c-2-4 2-8 6-6l44 28-12 21Z" />
+          <path className="jet-gold jet-gold--top" d="M96 62 16 28" />
+          <path className="jet-gold jet-gold--bottom" d="M96 78 16 112" />
+          <circle className="jet-engine jet-engine--top" cx="91" cy="53" r="12" />
+          <circle className="jet-engine jet-engine--bottom" cx="91" cy="87" r="12" />
+          <path className="jet-engine-core" d="M84 53h14M84 87h14" />
+          <g className="jet-windows">
+            <circle cx="129" cy="62" r="2.2" />
+            <circle cx="139" cy="61" r="2.2" />
+            <circle cx="149" cy="61" r="2.2" />
+            <circle cx="159" cy="61" r="2.2" />
+            <circle cx="169" cy="62" r="2.2" />
+          </g>
         </svg>
       </div>
     </div>

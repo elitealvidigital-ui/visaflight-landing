@@ -206,9 +206,10 @@ a {
 
 .hero-map {
   position: absolute;
-  inset: 70px 120px 80px 170px;
-  opacity: 0.98;
-  filter: saturate(1.24) contrast(1.12) brightness(0.82);
+  inset: 70px 0 0 190px;
+  z-index: 0;
+  opacity: 0.86;
+  filter: saturate(1.22) contrast(1.24) brightness(0.58);
   will-change: transform, opacity;
 }
 
@@ -219,11 +220,12 @@ a {
 .hero-glow {
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
 .hero-glow--left {
-  background: linear-gradient(90deg, rgba(5, 12, 27, 0.98), rgba(5, 12, 27, 0.78) 34%, rgba(5, 12, 27, 0.12) 64%, rgba(5, 12, 27, 0.38) 100%);
+  background: linear-gradient(90deg, rgba(5, 12, 27, 0.98), rgba(5, 12, 27, 0.94) 28%, rgba(5, 12, 27, 0.36) 45%, rgba(5, 12, 27, 0.04) 68%, rgba(5, 12, 27, 0.2) 100%);
 }
 
 .hero-glow--right {
@@ -324,7 +326,7 @@ a {
 }
 
 .hero-content {
-  min-height: calc(100vh - 190px);
+  min-height: calc(100vh - 230px);
   display: grid;
   grid-template-columns: minmax(320px, 0.92fr) minmax(280px, 1fr);
   align-items: center;
@@ -338,7 +340,7 @@ a {
 }
 
 .hero-copy h1 {
-  font-size: clamp(3.1rem, 6.4vw, 5.65rem);
+  font-size: clamp(3rem, 5.6vw, 5.15rem);
   letter-spacing: 0;
 }
 
@@ -390,6 +392,7 @@ a {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 22px;
+  padding-bottom: 18px;
 }
 
 .metric {
@@ -466,15 +469,11 @@ a {
 .flight-route {
   fill: none;
   stroke: var(--gold);
-  stroke-width: 0.32;
+  stroke-width: 0.36;
   stroke-linecap: round;
   stroke-dasharray: 1.1 1.15;
   filter: drop-shadow(0 0 8px rgba(247, 191, 88, 0.75));
   vector-effect: non-scaling-stroke;
-}
-
-.flight-route--ghost {
-  opacity: 0.18;
 }
 
 .flight-route--progress {
@@ -492,15 +491,73 @@ a {
 .flight-plane {
   position: fixed;
   z-index: 6;
-  width: clamp(48px, 6vw, 88px);
-  height: clamp(48px, 6vw, 88px);
+  width: clamp(88px, 7vw, 118px);
+  aspect-ratio: 1.57;
+  height: auto;
   will-change: transform, opacity;
-  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.34));
 }
 
 .flight-plane svg {
   width: 100%;
   height: 100%;
+  overflow: visible;
+}
+
+.jet-shadow {
+  fill: rgba(1, 8, 22, 0.22);
+  filter: blur(6px);
+}
+
+.jet-body {
+  fill: url("#jet-body");
+  stroke: rgba(7, 20, 47, 0.18);
+  stroke-width: 1.2;
+}
+
+.jet-spine,
+.jet-belly {
+  fill: none;
+  stroke: rgba(7, 20, 47, 0.16);
+  stroke-width: 1.4;
+}
+
+.jet-wing,
+.jet-tail,
+.jet-tail-fin {
+  fill: url("#jet-blue");
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 1.1;
+}
+
+.jet-cockpit {
+  fill: #07142f;
+  opacity: 0.84;
+}
+
+.jet-gold {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+}
+
+.jet-engine {
+  fill: #07142f;
+  stroke: #dce9ff;
+  stroke-width: 3;
+}
+
+.jet-engine-core {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.jet-windows {
+  fill: #123f88;
+  opacity: 0.88;
 }
 
 /* Journey tracker */
@@ -589,7 +646,7 @@ a {
 
 /* Destination */
 .destinations-section {
-  padding: 70px 0 78px;
+  padding: 58px 0 64px;
   background:
     linear-gradient(110deg, #ffffff 0%, #eef4ff 62%, #dfeaff 100%);
   color: var(--ink);
@@ -708,7 +765,7 @@ a {
 /* Documents */
 .documents-section {
   min-height: max(620px, 100vh);
-  padding: 90px 0;
+  padding: 70px 0;
   background:
     linear-gradient(90deg, rgba(3, 10, 25, 0.98), rgba(8, 32, 75, 0.92)),
     var(--navy-900);
@@ -762,9 +819,33 @@ a {
 .documents-frame {
   position: absolute;
   inset: 0 180px 0 0;
-  border-radius: 8px;
-  filter: drop-shadow(0 34px 40px rgba(0, 0, 0, 0.35));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 34px 80px rgba(0, 0, 0, 0.34);
+  filter: saturate(1.02);
   will-change: transform, opacity;
+}
+
+.documents-frame img,
+.stamp-frame img,
+.boarding-frame img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.documents-frame::after,
+.boarding-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 54%, rgba(2, 9, 22, 0.24) 100%),
+    linear-gradient(90deg, rgba(2, 9, 22, 0.2), transparent 24%, transparent 76%, rgba(2, 9, 22, 0.22));
 }
 
 .scanner-beam {
@@ -825,7 +906,7 @@ a {
 
 /* Approval */
 .approval-section {
-  padding: 76px 0 82px;
+  padding: 64px 0 70px;
   background: linear-gradient(110deg, #ffffff 0%, #f2f6ff 72%, #e7efff 100%);
   color: var(--ink);
 }
@@ -949,24 +1030,43 @@ a {
   margin-bottom: 18px;
 }
 
-.approval-card small,
-.approval-card strong {
+.approval-detail {
+  position: relative;
+  z-index: 2;
+}
+
+.secure-field {
+  display: grid;
+  grid-template-columns: 1fr minmax(58px, 0.72fr);
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.secure-field span {
+  color: #6d7b96;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.secure-field i {
   display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(36, 100, 223, 0.16), rgba(36, 100, 223, 0.04));
 }
 
-.approval-card small {
-  margin-top: 10px;
-  color: #7a879e;
-  font-size: 0.72rem;
-}
-
-.approval-card strong {
-  color: var(--ink);
+.secure-field strong {
+  justify-self: start;
+  color: #1bbf75;
+  font-size: 0.78rem;
 }
 
 .stamp-frame {
   align-self: center;
   height: 164px;
+  overflow: hidden;
+  border-radius: 14px;
   transform: rotate(-12deg);
   z-index: 2;
   will-change: transform, opacity;
@@ -1018,7 +1118,7 @@ a {
 /* Final CTA */
 .final-section {
   min-height: max(620px, 100vh);
-  padding: 92px 0 90px;
+  padding: 76px 0 78px;
   background:
     linear-gradient(90deg, rgba(4, 10, 24, 0.96), rgba(8, 20, 48, 0.82) 48%, rgba(6, 13, 31, 0.74)),
     linear-gradient(180deg, #101a42 0%, #23336c 46%, #f0a85b 100%);
@@ -1058,8 +1158,12 @@ a {
 .boarding-frame {
   position: absolute;
   inset: 0;
-  border-radius: 8px;
-  filter: drop-shadow(0 34px 46px rgba(0, 0, 0, 0.32));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.32);
+  filter: saturate(1.03);
+  opacity: 0.9;
   will-change: transform, opacity;
 }
 

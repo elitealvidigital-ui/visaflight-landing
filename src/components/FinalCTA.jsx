@@ -17,8 +17,9 @@ export default function FinalCTA() {
       const q = gsap.utils.selector(sectionRef);
       const mm = gsap.matchMedia();
 
-      gsap.set(q(".final-grid .section-copy > *"), { y: 34, autoAlpha: 0 });
-      gsap.set(q(".boarding-frame"), { y: 46, autoAlpha: 0, scale: 0.92 });
+      gsap.set(q(".final-grid .section-copy .eyebrow, .final-grid .section-copy h2, .final-grid .section-copy p"), { y: 0, autoAlpha: 1 });
+      gsap.set(q(".final-grid .hero-actions, .clients-row"), { y: 28, autoAlpha: 0 });
+      gsap.set(q(".boarding-frame"), { y: 0, autoAlpha: 1, scale: 1 });
       gsap.set(q(".boarding-pass-card"), { y: 78, x: -18, autoAlpha: 0, rotation: -5, scale: 0.9 });
       gsap.set(q(".passport-book"), { y: 92, x: 34, autoAlpha: 0, rotation: 10, scale: 0.88 });
       gsap.set(q(".sunset-plane"), { x: -60, y: 36, autoAlpha: 0, rotation: -8 });
@@ -30,18 +31,20 @@ export default function FinalCTA() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top top",
-            end: "+=175%",
+            end: "+=110%",
             scrub: 1.2,
             pin: true,
             anticipatePin: 1,
           },
         });
 
-        tl.to(q(".boarding-frame"), {
+        tl.fromTo(q(".boarding-frame"), {
+          y: 10,
+          scale: 0.985,
+        }, {
           y: 0,
-          autoAlpha: 1,
           scale: 1,
-          duration: 0.36,
+          duration: 0.18,
         })
           .to(q(".boarding-pass-card"), {
             y: 0,
@@ -50,7 +53,7 @@ export default function FinalCTA() {
             rotation: -2,
             scale: 1,
             duration: 0.34,
-          }, "-=0.08")
+          }, 0.18)
           .to(q(".passport-book"), {
             y: 0,
             x: 0,
@@ -59,13 +62,7 @@ export default function FinalCTA() {
             scale: 1,
             duration: 0.3,
             ease: "back.out(1.5)",
-          }, "-=0.18")
-          .to(q(".final-grid .section-copy .eyebrow, .final-grid .section-copy h2, .final-grid .section-copy p"), {
-            y: 0,
-            autoAlpha: 1,
-            stagger: 0.06,
-            duration: 0.3,
-          }, "-=0.1")
+          }, 0.28)
           .to(q(".sunset-plane"), {
             x: 0,
             y: 0,
@@ -73,23 +70,23 @@ export default function FinalCTA() {
             rotation: 18,
             duration: 0.38,
             ease: "power2.out",
-          }, "-=0.12")
+          }, 0.36)
           .to(q(".final-grid .hero-actions"), {
             y: 0,
             autoAlpha: 1,
             duration: 0.24,
-          }, "-=0.04")
+          }, 0.56)
           .to(q(".clients-row"), {
             y: 0,
             autoAlpha: 1,
             duration: 0.24,
-          }, "-=0.08")
+          }, 0.66)
           .to(q(".final-success-glow"), {
             scale: 1,
             autoAlpha: 1,
             duration: 0.34,
             ease: "power2.out",
-          }, "-=0.06");
+          }, 0.7);
       });
 
       mm.add("(max-width: 900px)", () => {
@@ -155,11 +152,11 @@ export default function FinalCTA() {
             mode="scroll"
             className="boarding-frame"
             alt="Boarding pass and passport animation"
-            posterFrame={116}
+            posterFrame={0}
             scrollTrigger={() => ({
               trigger: sectionRef.current,
               start: "top top",
-              end: "+=175%",
+              end: "+=110%",
               scrub: 1.1,
             })}
           />

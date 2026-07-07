@@ -81,9 +81,9 @@ export default function DestinationSection() {
         gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
       });
 
-      gsap.set(cards, { y: 58, autoAlpha: 0, scale: 0.94 });
-      gsap.set(chips, { x: -12, autoAlpha: 0 });
-      gsap.set(q(".destination-grid .section-copy > *"), { y: 28, autoAlpha: 0 });
+      gsap.set(cards, { y: 0, autoAlpha: 1, scale: 1 });
+      gsap.set(chips, { x: 0, autoAlpha: 1 });
+      gsap.set(q(".destination-grid .section-copy > *"), { y: 0, autoAlpha: 1 });
 
       mm.add("(min-width: 901px)", () => {
         const tl = gsap.timeline({
@@ -91,38 +91,26 @@ export default function DestinationSection() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top top",
-            end: "+=170%",
+            end: "+=95%",
             scrub: 1.15,
             pin: true,
             anticipatePin: 1,
           },
         });
 
-        tl.to(q(".destination-grid .section-copy > *"), {
+        tl.fromTo(q(".destination-grid .section-copy > *"), {
+          y: 12,
+        }, {
           y: 0,
-          autoAlpha: 1,
-          stagger: 0.05,
-          duration: 0.28,
+          stagger: 0.045,
+          duration: 0.18,
         })
-          .to(cards, {
-            y: 0,
-            autoAlpha: 1,
-            scale: 1,
-            stagger: 0.08,
-            duration: 0.42,
-          }, "-=0.04")
           .to(paths, {
             strokeDashoffset: 0,
             stagger: 0.045,
-            duration: 0.42,
+            duration: 0.36,
             ease: "power2.out",
-          }, "-=0.22")
-          .to(chips, {
-            x: 0,
-            autoAlpha: 1,
-            stagger: 0.018,
-            duration: 0.25,
-          }, "-=0.22");
+          }, "-=0.05");
 
         cards.forEach((card, index) => {
           tl.to(card, {
@@ -132,7 +120,7 @@ export default function DestinationSection() {
             boxShadow: "0 30px 86px rgba(247, 191, 88, 0.34)",
             duration: 0.12,
             ease: "power2.out",
-          }, 0.78 + index * 0.105).to(card, {
+          }, 0.36 + index * 0.12).to(card, {
             y: 0,
             scale: 1,
             borderColor: "rgba(42, 79, 143, 0.13)",
@@ -144,31 +132,6 @@ export default function DestinationSection() {
       });
 
       mm.add("(max-width: 900px)", () => {
-        gsap.to(q(".destination-grid .section-copy > *"), {
-          y: 0,
-          autoAlpha: 1,
-          stagger: 0.05,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 72%",
-          },
-        });
-
-        gsap.to(cards, {
-          y: 0,
-          autoAlpha: 1,
-          scale: 1,
-          stagger: 0.08,
-          duration: 0.75,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 58%",
-          },
-        });
-
         gsap.to(paths, {
           strokeDashoffset: 0,
           stagger: 0.02,
