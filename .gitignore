@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+
+*.log
+vite-dev*.log
+
+.env
+.env.*
+
+A*.zip
+*.zip
+
+.DS_Store
+Thumbs.db
