@@ -14,7 +14,7 @@ for (const entry of entries) {
     .filter((file) => file.toLowerCase().endsWith(".webp"))
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
-  manifest[entry.name] = files.map((file) => `/animations/${entry.name}/${file}`);
+  manifest[entry.name] = files.map((file) => `animations/${entry.name}/${file}`);
 }
 
 await writeFile(

@@ -6,10 +6,12 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const manifestCache = { value: null };
+const assetBase = import.meta.env.BASE_URL;
+const assetUrl = (src) => `${assetBase}${src.replace(/^\/+/, "")}`;
 
 async function loadManifest() {
   if (manifestCache.value) return manifestCache.value;
-  const response = await fetch("/animations/manifest.json");
+  const response = await fetch(assetUrl("animations/manifest.json"));
   if (!response.ok) throw new Error("Could not load animation manifest");
   manifestCache.value = await response.json();
   return manifestCache.value;
@@ -18,7 +20,7 @@ async function loadManifest() {
 function preload(frames, index) {
   frames.slice(index, index + 5).forEach((src) => {
     const img = new Image();
-    img.src = src;
+    img.src = assetUrl(src);
   });
 }
 
@@ -123,7 +125,7 @@ export default function FrameSequence({
   return (
     <div ref={rootRef} className={`frame-sequence ${className}`}>
       {src ? (
-        <img className={imgClassName} src={src} alt={alt} draggable="false" />
+        <img className={imgClassName} src={assetUrl(src)} alt={alt} draggable="false" />
       ) : (
         <div className="frame-sequence__fallback" />
       )}
